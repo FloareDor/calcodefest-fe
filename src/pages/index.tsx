@@ -56,7 +56,7 @@ export default function Home() {
               whileTap={{ scale: 0.95 }}
               onClick={startPodcast}
               disabled={isLoading || !duration || !topic}
-              className={`w-full bg-gradient-to-r from-[#4CA1AF] to-[#C4E0E5] text-white p-3 rounded-md font-semibold 
+              className={`w-full bg-gradient-to-r from-[#4CA1AF] to-[#a0d7e0] text-white p-3 rounded-md font-semibold 
                 ${(isLoading || !duration || !topic) ? 'opacity-50 cursor-not-allowed' : 'animate-pulse hover:from-[#4CA1AF] hover:to-[#C4E0E5]'}`}
             >
               {isLoading ? 'Generating...' : 'Start Podcast'}
