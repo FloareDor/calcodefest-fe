@@ -76,28 +76,41 @@ export default function PodcastPlayer({ topic, duration }: PodcastPlayerProps) {
   };
 
   const askQuestion = async () => {
-    setIsAskingQuestion(true);
-    setError(null);
-    try {
-      const response = await fetch('http://localhost:8000/ask', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ question }),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to ask question');
-      }
-      const data = await response.json();
-      setConversation(prev => [...prev, `Listener: ${question}`, `Expert: ${data.answer}`]);
-      setQuestion('');
-    } catch (error) {
-      console.error('Error asking question:', error);
-      setError('Failed to ask the question. Please try again.');
-    } finally {
-      setIsAskingQuestion(false);
-    }
+	setIsAskingQuestion(true);
+	setError(null);
+	try {
+	  const response = await fetch('http://localhost:8000/ask', {
+		method: 'POST',
+		headers: {
+		  'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ question }),
+	  });
+	  if (!response.ok) {
+		throw new Error('Failed to ask question');
+	  }
+	  const data = await response.json();
+  
+	  // Remove the last audio file from the queue
+	  audioQueue.current.pop();
+  
+	  // Update the conversation state
+	  setConversation(prev => {
+		const newConversation = [...prev];
+		newConversation.pop(); // Remove the last AI-generated message
+		return [...newConversation, `Listener: ${question}`, `Expert: ${data.answer}`];
+	  });
+  
+	  // Decrement the current audio index
+	  setCurrentAudioIndex(prev => Math.max(0, prev - 1));
+  
+	  setQuestion('');
+	} catch (error) {
+	  console.error('Error asking question:', error);
+	  setError('Failed to ask the question. Please try again.');
+	} finally {
+	  setIsAskingQuestion(false);
+	}
   };
 
   const toggleAudio = () => {
