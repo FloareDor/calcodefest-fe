@@ -95,7 +95,7 @@ export default function PodcastPlayer({ topic, duration }: PodcastPlayerProps) {
 
 	useEffect(() => {
 		const thunderInterval = setInterval(() => {
-		  if (Math.random() < 1.0) {  // 10% chance of thunder every interval
+		  if (Math.random() < 0.7) {  // 10% chance of thunder every interval
 			triggerThunder();
 		  }
 		}, 25000);  // Check every 30 seconds
@@ -115,7 +115,7 @@ export default function PodcastPlayer({ topic, duration }: PodcastPlayerProps) {
 		if (backgroundAudioRef.current) {
 			backgroundAudioRef.current.src = '/rain.mp3';
 			backgroundAudioRef.current.loop = true;
-			backgroundAudioRef.current.volume = 0.25;
+			backgroundAudioRef.current.volume = 0.20;
 			backgroundAudioRef.current.play().catch(e => console.error("Error playing background audio:", e));
 		}
 	};

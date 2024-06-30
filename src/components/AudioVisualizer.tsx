@@ -20,15 +20,14 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ isPlaying, isRecordin
           key={i}
           className="raindrop"
           style={{
-			  left: `${Math.random() * 100}%`,
-			  top: `${Math.random() * 100}%`,
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
             animationDuration: `${0.5 + Math.random() * 1.5}s`,
             animationDelay: `${Math.random() * 2}s`,
           }}
         />
       ));
     };
-
     setRaindrops(generateRaindrops());
   }, []);
 
@@ -36,7 +35,7 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ isPlaying, isRecordin
     const circle = event.currentTarget;
     const rect = circle.getBoundingClientRect();
     const x = event.clientX - rect.left;
-    
+   
     if (audioRef.current) {
       if (x < rect.width / 2) {
         audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 5);
@@ -55,10 +54,10 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ isPlaying, isRecordin
       <div className="absolute inset-0 overflow-hidden rounded-full">
         {raindrops}
       </div>
-      <div 
+      <div
         className={`absolute inset-2 rounded-full flex items-center justify-center cursor-pointer backdrop-blur-sm ${
           isLoading ? 'animate-pulse bg-gradient-to-br from-[#9ed6df] to-[#C4E0E5] bg-opacity-50' :
-          isPlaying ? 'animate-pulse bg-gradient-to-br from-[#9ed6df] to-[#C4E0E5] bg-opacity-50' : 
+          isPlaying ? 'animate-pulse bg-gradient-to-br from-[#9ed6df] to-[#C4E0E5] bg-opacity-50' :
           isRecording ? 'bg-red-400 bg-opacity-50' : 'bg-[#cbe8ee] bg-opacity-50'
         }`}
         onClick={handleCircleClick}
@@ -69,10 +68,14 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ isPlaying, isRecordin
           <span className="text-white text-2xl font-bold text-center">{topic}</span>
         )}
         {flashLeft && (
-          <div className="absolute left-0 top-0 w-1/2 h-full bg-white opacity-50 rounded-l-full transition-opacity duration-300"></div>
+          <div className="absolute left-0 top-0 w-1/2 h-full text-gray-700 bg-white opacity-50 rounded-l-full transition-opacity duration-300 flex items-center justify-center">
+            <span className="text-xl font-bold">&lt;&lt; 5 seconds</span>
+          </div>
         )}
         {flashRight && (
-          <div className="absolute right-0 top-0 w-1/2 h-full bg-white opacity-50 rounded-r-full transition-opacity duration-300"></div>
+          <div className="absolute right-0 top-0 w-1/2 h-full bg-white opacity-50 rounded-r-full transition-opacity duration-300 flex items-center justify-center">
+            <span className="text-xl font-bold">5 seconds &gt;&gt;</span>
+          </div>
         )}
       </div>
     </div>
