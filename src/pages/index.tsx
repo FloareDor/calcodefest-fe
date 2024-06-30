@@ -37,7 +37,7 @@ export default function Home() {
                 placeholder="e.g., 15"
                 value={duration}
                 onChange={(e) => setDuration(e.target.value)}
-                className="text-gray-600 w-full p-3 border bg-[#C4E0E5] border-gray-300 focus:outline-none rounded-md x focus:ring-[#4CA1AF] focus:border-transparent"
+                className="text-gray-400 w-full p-3 border bg-[#C4E0E5] border-gray-300 focus:outline-none rounded-md x focus:ring-[#4CA1AF] focus:border-transparent"
               />
             </div>
             <div>
@@ -48,7 +48,7 @@ export default function Home() {
                 placeholder="e.g., Bezier Curves"
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
-                className="text-gray-600 w-full p-3 border border-gray-300 bg-[#C4E0E5] rounded-md focus:outline-none  focus:ring-[#4CA1AF] focus:border-transparent"
+                className="text-gray-400 w-full p-3 border border-gray-300 bg-[#C4E0E5] rounded-md focus:outline-none  focus:ring-[#4CA1AF] focus:border-transparent"
               />
             </div>
             <motion.button

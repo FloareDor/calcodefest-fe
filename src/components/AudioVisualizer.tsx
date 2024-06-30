@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { FaMicrophone, FaStop } from 'react-icons/fa';
+import { IoPlaySharp, IoPauseSharp } from 'react-icons/io5';
+import { BiSkipPrevious, BiSkipNext } from 'react-icons/bi';
 
 interface AudioVisualizerProps {
   isPlaying: boolean;
@@ -6,22 +9,36 @@ interface AudioVisualizerProps {
   isLoading: boolean;
   topic: string;
   audioRef: React.RefObject<HTMLAudioElement>;
+  onPlayPause: () => void;
+  onSkipBack: () => void;
+  onSkipForward: () => void;
+  onRecordStart: () => void;
+  onRecordStop: () => void;
 }
 
-const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ isPlaying, isRecording, isLoading, topic, audioRef }) => {
-  const [flashLeft, setFlashLeft] = useState(false);
-  const [flashRight, setFlashRight] = useState(false);
+const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
+  isPlaying,
+  isRecording,
+  isLoading,
+  topic,
+  audioRef,
+  onPlayPause,
+  onSkipBack,
+  onSkipForward,
+  onRecordStart,
+  onRecordStop
+}) => {
   const [raindrops, setRaindrops] = useState<JSX.Element[]>([]);
 
   useEffect(() => {
     const generateRaindrops = () => {
-      return Array.from({ length: 50 }, (_, i) => (
+      return Array.from({ length: 200 }, (_, i) => (
         <div
           key={i}
           className="raindrop"
           style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
+            left: `${Math.random() * 100}vw`,
+            top: `${Math.random() * 100}vh`,
             animationDuration: `${0.5 + Math.random() * 1.5}s`,
             animationDelay: `${Math.random() * 2}s`,
           }}
@@ -31,51 +48,56 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ isPlaying, isRecordin
     setRaindrops(generateRaindrops());
   }, []);
 
-  const handleCircleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    const circle = event.currentTarget;
-    const rect = circle.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-   
-    if (audioRef.current) {
-      if (x < rect.width / 2) {
-        audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 5);
-        setFlashLeft(true);
-        setTimeout(() => setFlashLeft(false), 200);
-      } else {
-        audioRef.current.currentTime = Math.min(audioRef.current.duration, audioRef.current.currentTime + 5);
-        setFlashRight(true);
-        setTimeout(() => setFlashRight(false), 200);
-      }
-    }
-  };
-
   return (
     <div className="relative w-80 h-80">
-      <div className="absolute inset-0 overflow-hidden rounded-full">
+      <div className="fixed inset-0 pointer-events-none">
         {raindrops}
       </div>
       <div
-        className={`absolute inset-2 rounded-full flex items-center justify-center cursor-pointer backdrop-blur-sm ${
+        className={`absolute inset-2 rounded-full flex flex-col items-center justify-center backdrop-blur-md ${
           isLoading ? 'animate-pulse bg-gradient-to-br from-[#9ed6df] to-[#C4E0E5] bg-opacity-50' :
           isPlaying ? 'animate-pulse bg-gradient-to-br from-[#9ed6df] to-[#C4E0E5] bg-opacity-50' :
-          isRecording ? 'bg-red-400 bg-opacity-50' : 'bg-[#cbe8ee] bg-opacity-50'
+          isRecording ? 'bg-gradient-to-br from-[#ff9999] to-[#ffb3b3] bg-opacity-50' : 'bg-[#cbe8ee] bg-opacity-50'
         }`}
-        onClick={handleCircleClick}
       >
         {isLoading ? (
           <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-white"></div>
         ) : (
-          <span className="text-white text-2xl font-bold text-center">{topic}</span>
-        )}
-        {flashLeft && (
-          <div className="absolute left-0 top-0 w-1/2 h-full text-gray-700 bg-white opacity-50 rounded-l-full transition-opacity duration-300 flex items-center justify-center">
-            <span className="text-xl font-bold">&lt;&lt; 5 seconds</span>
-          </div>
-        )}
-        {flashRight && (
-          <div className="absolute right-0 top-0 w-1/2 h-full bg-white opacity-50 rounded-r-full transition-opacity duration-300 flex items-center justify-center">
-            <span className="text-xl font-bold">5 seconds &gt;&gt;</span>
-          </div>
+          <>
+            <button
+              onClick={isRecording ? onRecordStop : onRecordStart}
+              className={`mb-4 p-3 rounded-full transition-all duration-300 ${
+                isRecording
+                ? 'bg-red-500 hover:bg-red-600 animate-pulse'
+                : 'bg-[#a5dbe6] hover:bg-[#c1e5eb]'
+              }`}
+            >
+              {isRecording ? <FaStop size={20} color="white" /> : <FaMicrophone size={20} color="white" />}
+            </button>
+           
+            <span className="text-white text-2xl font-bold text-center mb-4">{topic}</span>
+           
+            <div className="flex justify-center space-x-4">
+              <button
+                onClick={onSkipBack}
+                className="p-3 bg-[#a5dbe6] hover:bg-[#c1e5eb] rounded-full transition-all duration-300"
+              >
+                <BiSkipPrevious size={24} color="white" />
+              </button>
+              <button
+                onClick={onPlayPause}
+                className="p-3 bg-[#a5dbe6] hover:bg-[#c1e5eb] rounded-full transition-all duration-300"
+              >
+                {isPlaying ? <IoPauseSharp size={24} color="white" /> : <IoPlaySharp size={24} color="white" />}
+              </button>
+              <button
+                onClick={onSkipForward}
+                className="p-3 bg-[#a5dbe6] hover:bg-[#c1e5eb] rounded-full transition-all duration-300"
+              >
+                <BiSkipNext size={24} color="white" />
+              </button>
+            </div>
+          </>
         )}
       </div>
     </div>
