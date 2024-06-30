@@ -95,10 +95,10 @@ export default function PodcastPlayer({ topic, duration }: PodcastPlayerProps) {
 
 	useEffect(() => {
 		const thunderInterval = setInterval(() => {
-		  if (Math.random() < 0.1) {  // 10% chance of thunder every interval
+		  if (Math.random() < 1.0) {  // 10% chance of thunder every interval
 			triggerThunder();
 		  }
-		}, 30000);  // Check every 30 seconds
+		}, 25000);  // Check every 30 seconds
 	
 		return () => clearInterval(thunderInterval);
 	  }, []);
@@ -254,7 +254,7 @@ export default function PodcastPlayer({ topic, duration }: PodcastPlayerProps) {
 		
 				<audio ref={audioRef} onEnded={handleAudioEnd} className="hidden" />
 				<audio ref={backgroundAudioRef} className="hidden" />
-				<audio ref={thunderAudioRef} src="/thunder.mp3" className="hidden" />
+				<audio ref={thunderAudioRef} src="/thunderstorm.mp3" className="hidden" />
 		
 				{error && <p className="text-red-500 mt-4 text-center">{error}</p>}
   
